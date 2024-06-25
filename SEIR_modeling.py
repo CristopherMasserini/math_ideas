@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 """
 Modeling the SEIR model for infections disease
 
@@ -50,17 +52,36 @@ def step_all(iterations):
     sigma = 1
     gamma = 0.1
 
+    s_all = [s_0]
+    e_all = [e_0]
+    i_all = [i_0]
+    r_all = [r_0]
+
     for _ in range(0, iterations):
         s_n = s_0 + s_step(s_0, i_0, beta)
         e_n = e_0 + e_step(e_0, s_0, i_0, beta, sigma)
         i_n = i_0 + i_step(i_0, e_0, sigma, gamma)
         r_n = r_0 + r_step(i_0, gamma)
 
-        print(s_n, e_n, i_n, r_n)
+        s_all.append(s_n)
+        e_all.append(e_n)
+        i_all.append(i_n)
+        r_all.append(r_n)
 
         s_0, e_0, i_0, r_0 = s_n, e_n, i_n, r_n
 
-    
-    # return s_0, e_0, i_0, r_0
+    return s_all, e_all, i_all, r_all
 
-step_all(10)
+
+def plot_SEIR(iterations):
+    t = list(range(0, iterations+1))
+    s_all, e_all, i_all, r_all = step_all(iterations)
+
+    plt.plot(t, s_all, label="Susceptible")
+    plt.plot(t, e_all, label="Exposed")
+    plt.plot(t, i_all, label="Infected")
+    plt.plot(t, r_all, label="Recovered")
+    plt.legend()
+    plt.show()
+
+plot_SEIR(100)
