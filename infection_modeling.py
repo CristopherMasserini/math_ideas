@@ -57,28 +57,16 @@ class World:
     def add_town_connection(self, town1, town2):
         if town1 and town2 in self.towns:
             self.connections.add_edge(town1, town2)
+            return True
         else:
             print(f'One of the towns does not exist in the World. Towns: {self.towns}')
+            return False
 
     def show_neighbors(self):
         for town in self.towns:
             print(f"Town {town}'s Neighbors: {list(self.connections.neighbors(town))}")
 
-
-world = World()
-world.add_town('A')
-world.add_town('B')
-world.add_town('C')
-world.add_town('D')
-world.add_town('E')
-world.add_town('F')
-world.add_town_connection('A', 'B')
-world.add_town_connection('A', 'C')
-world.add_town_connection('A', 'D')
-world.add_town_connection('B', 'E')
-world.add_town_connection('B', 'D')
-world.add_town_connection('C', 'D')
-world.add_town_connection('D', 'E')
-world.add_town_connection('E', 'F')
-
-world.show_neighbors()
+    def is_neighbor(self, town1, town2):
+        neighbors = list(self.connections.neighbors(town1))
+        return town2 in neighbors
+1
