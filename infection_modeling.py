@@ -4,13 +4,13 @@ import random
 
 
 class Infection:
-    def __init__(self, infectionCoefficient, recoveryCoefficient, immunityCoefficient):
+    def __init__(self, infectionCoefficient, mortalityCoefficient, immunityCoefficient):
         self.infectionCoefficient = infectionCoefficient
-        self.recoveryCoefficient = recoveryCoefficient
+        self.mortalityCoefficient = mortalityCoefficient
         self.immunityCoefficient = immunityCoefficient
-        self.totalInfected = 0
-        self.totalRecovered = 0
-        self.totalCasualties = 0
+        # self.totalInfected = 0
+        # self.totalRecovered = 0
+        # self.totalCasualties = 0
 
 
 class Person:
@@ -20,11 +20,31 @@ class Person:
         self.infected = False
         self.alive = True
 
-    def infect(self, infectionCoefficient):
+    def get_infected(self, infectionCoefficient):
         if self.alive and self.susceptible and self.exposed and not self.infected:
             infected = random.random() <= infectionCoefficient
             if infected:
                 self.infected = True
+                self.susceptible = False
+
+    def infect_other(self, other, infectionCoefficient):
+        if self.infected:
+            other.exposed = True
+            other.get_infected(infectionCoefficient)
+
+    def recover(self, immunityCoefficient):
+        if random.random() <= immunityCoefficient:
+            self.susceptible = False
+        else:
+            self.susceptible = True
+
+        self.exposed = False
+        self.infected = False
+
+    def mortality(self, mortalityCoefficient):
+        if random.random() <= mortalityCoefficient:
+            self.alive = False
+
 
 
 class Town:
@@ -69,4 +89,4 @@ class World:
     def is_neighbor(self, town1, town2):
         neighbors = list(self.connections.neighbors(town1))
         return town2 in neighbors
-1
+
