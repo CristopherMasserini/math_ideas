@@ -44,11 +44,30 @@ def run_graph(points):
     plt.show()
 
 
+def inputs():
+    num = float(input('Please enter a decimal less than one: '))
+    b_raw = input('Please enter two comma separated numbers. This is transformation additon vector: ')
+    x_raw = input('Please enter two comma separated numbers. This is starting vector: ')
+    A_raw = input('Please enter four comma separated numbers. This is Matrix transformation: ')
+
+    print(num)
+
+    b_list = b_raw.split(',')
+    x_list = x_raw.split(',')
+    A_list = A_raw.split(',')
+
+    b_array = np.array([[b_list[0]], [b_list[1]]])
+    x_array = np.array([[x_list[0]], [x_list[1]]])
+    A_matrix = np.array([[A_list[0], A_list[1]], [A_list[2], A_list[3]]])
+
+    return b_array, x_array, A_matrix
+
 if __name__ == '__main__':
-    matrix_num = 0.5
-    b_vec = np.array([[1], [0]])
-    x_init = np.array([[1], [1]])
-    computed_points = run_computations(matrix_num, x_init, b_vec)
-    run_graph(computed_points)
+    # matrix_num = 0.5
+    # b_vec = np.array([[1], [0]])
+    # x_init = np.array([[1], [1]])
+    # computed_points = run_computations(matrix_num, x_init, b_vec)
+    # run_graph(computed_points)
+    inputs()
 
 
