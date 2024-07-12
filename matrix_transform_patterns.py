@@ -44,23 +44,39 @@ def run_graph(points):
     plt.show()
 
 
+def check_nums(lst: list):
+    for entry in lst:
+        if entry is not float:
+            return False
+
+    return True
+
+
 def inputs():
-    num = float(input('Please enter a decimal less than one: '))
-    b_raw = input('Please enter two comma separated numbers. This is transformation additon vector: ')
-    x_raw = input('Please enter two comma separated numbers. This is starting vector: ')
-    A_raw = input('Please enter four comma separated numbers. This is Matrix transformation: ')
+    valid = False
+    num = 0.0
+    b_list = []
+    x_list = []
 
-    print(num)
+    while not valid:
+        num = float(input('Please enter a decimal less than one. This is to build matrix: '))
+        b_raw = input('Please enter two comma separated numbers. This is transformation additon vector: ')
+        x_raw = input('Please enter two comma separated numbers. This is starting vector: ')
 
-    b_list = b_raw.split(',')
-    x_list = x_raw.split(',')
-    A_list = A_raw.split(',')
+        b_list = b_raw.split(',')
+        x_list = x_raw.split(',')
+
+        if check_nums(b_list) and check_nums(x_list):
+            valid = True
+        else:
+            print('Not valid entries, try again')
 
     b_array = np.array([[b_list[0]], [b_list[1]]])
     x_array = np.array([[x_list[0]], [x_list[1]]])
-    A_matrix = np.array([[A_list[0], A_list[1]], [A_list[2], A_list[3]]])
+    a_matrix = np.array([[num, -num], [num, num]])
 
-    return b_array, x_array, A_matrix
+    return b_array, x_array, a_matrix
+
 
 if __name__ == '__main__':
     # matrix_num = 0.5
