@@ -46,7 +46,7 @@ def run_graph(points):
 
 def check_nums(lst: list):
     for entry in lst:
-        if entry is not float:
+        if not isinstance(entry, int):
             return False
 
     return True
@@ -59,31 +59,32 @@ def inputs():
     x_list = []
 
     while not valid:
-        num = float(input('Please enter a decimal less than one. This is to build matrix: '))
-        b_raw = input('Please enter two comma separated numbers. This is transformation additon vector: ')
-        x_raw = input('Please enter two comma separated numbers. This is starting vector: ')
+        num = float(input('Please enter a decimal less than one. This is to build matrix (A): '))
+        b_raw = input('Please enter two comma separated numbers. This is transformation addition vector (b): ')
+        x_raw = input('Please enter two comma separated numbers. This is starting vector (x): ')
 
-        b_list = b_raw.split(',')
-        x_list = x_raw.split(',')
+        try:
+            b_list = [int(i) for i in b_raw.split(',')]
+            x_list = [int(i) for i in x_raw.split(',')]
+        except ValueError:
+            print('Not valid entries, try again')
 
         if check_nums(b_list) and check_nums(x_list):
             valid = True
         else:
-            print('Not valid entries, try again')
+            print('Not valid entries, try again!')
 
     b_array = np.array([[b_list[0]], [b_list[1]]])
     x_array = np.array([[x_list[0]], [x_list[1]]])
-    a_matrix = np.array([[num, -num], [num, num]])
 
-    return b_array, x_array, a_matrix
+    return b_array, x_array, num
 
 
 if __name__ == '__main__':
-    # matrix_num = 0.5
-    # b_vec = np.array([[1], [0]])
-    # x_init = np.array([[1], [1]])
-    # computed_points = run_computations(matrix_num, x_init, b_vec)
-    # run_graph(computed_points)
-    inputs()
+    # Classic example is: matrix_num = 0.5, b_vec = np.array([[1], [0]]), x_init = np.array([[1], [1]])
+    b_vec, x_init, matrix_num = inputs()
+    computed_points = run_computations(matrix_num, x_init, b_vec)
+    run_graph(computed_points)
+
 
 
