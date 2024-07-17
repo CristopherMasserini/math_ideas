@@ -1,9 +1,10 @@
 import random
 
-class Ball():
+
+class Ball:
     def __init__(self):
-        self.position_x = 0
-        self.position_y = 0
+        self.position_x = None
+        self.position_y = None
         self.atBottom = False
 
     def possible_move(self):
@@ -66,7 +67,51 @@ class Grid:
         return self.grid[self.y_levels]
 
 
-gridObj = Grid(7)
-print(gridObj.grid)
+class BallSystem:
+    def __init__(self, bottom_container_count, balls_count):
+        self.gridObj = Grid(bottom_container_count)
+        self.balls = [Ball() for _ in range(0, balls_count)]
 
 
+
+    def initiate_balls(self):
+        for ball in self.balls:
+            self.gridObj.start_ball()
+            ball.position_y = 0
+            ball.position_x = self.gridObj.middle_x
+
+    def check_ball_at_bottom(self, ball, grid):
+        ballAtBottom = False
+        if ball.atBottom:
+            ballAtBottom = True
+        elif ball.position_y == grid.y_levels:
+            ball.atBottom = True
+            ballAtBottom = True
+
+        return ballAtBottom
+
+    def run_ball(self, ball):
+        while not ball.atBottom:
+            can_move = False
+            new_x = None
+            new_y = None
+            while not can_move:
+                new_x = ball.possible_move()
+                new_y = ball.position_y - 1
+                can_move = self.gridObj.check_valid_move(new_x, new_y)
+
+            self.gridObj.move_levels(ball.position_x, ball.position_y, new_x, new_y)
+            ball.moved(new_x)
+            ball.atBottom = self.check_ball_at_bottom(ball, self.gridObj)
+
+    def run_all_balls(self):
+        self.initiate_balls()
+        for ball in self.balls:
+            self.run_ball(ball)
+
+        return self.gridObj.get_base_level()
+
+
+system = BallSystem(5, 10)
+baseLevel = system.run_all_balls()
+print(baseLevel)
