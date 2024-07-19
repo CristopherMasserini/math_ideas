@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 
 
 class Ball:
@@ -18,7 +19,7 @@ class Ball:
         return possible_x
 
     def moved(self, new_x):
-        self.position_y -= 1
+        self.position_y += 1
         self.position_x = new_x
 
 
@@ -47,7 +48,7 @@ class Grid:
     def check_valid_move(self, possible_x, possible_y):
         valid_move = True
 
-        if possible_y > self.y_levels:
+        if possible_y > self.y_levels - 1:
             valid_move = False
         else:
             x_values_grid = self.grid[possible_y]
@@ -64,7 +65,7 @@ class Grid:
         self.grid[new_y][new_x] += 1
 
     def get_base_level(self):
-        return self.grid[self.y_levels]
+        return self.grid[-1]
 
 
 class BallSystem:
@@ -84,7 +85,7 @@ class BallSystem:
         ballAtBottom = False
         if ball.atBottom:
             ballAtBottom = True
-        elif ball.position_y == grid.y_levels:
+        elif ball.position_y == grid.y_levels - 1:
             ball.atBottom = True
             ballAtBottom = True
 
@@ -97,7 +98,7 @@ class BallSystem:
             new_y = None
             while not can_move:
                 new_x = ball.possible_move()
-                new_y = ball.position_y - 1
+                new_y = ball.position_y + 1
                 can_move = self.gridObj.check_valid_move(new_x, new_y)
 
             self.gridObj.move_levels(ball.position_x, ball.position_y, new_x, new_y)
@@ -111,7 +112,12 @@ class BallSystem:
 
         return self.gridObj.get_base_level()
 
+    def graph(self):
+        baseLevel = self.run_all_balls()
+        x = [i for i in range(0, len(baseLevel))]
+        plt.bar(x, baseLevel)
+        plt.show()
 
-system = BallSystem(5, 10)
-baseLevel = system.run_all_balls()
-print(baseLevel)
+
+system = BallSystem(11, 5000)
+system.graph()
