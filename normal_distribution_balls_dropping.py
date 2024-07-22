@@ -1,4 +1,5 @@
 import random
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -32,7 +33,7 @@ class Grid:
         self.fill_grid()
 
     def fill_grid(self):
-        initial_row = [False]*self.bottom_container_count
+        initial_row = [False] * self.bottom_container_count
         initial_row[self.middle_x] = 0
         self.grid.append(initial_row)
 
@@ -72,8 +73,6 @@ class BallSystem:
     def __init__(self, bottom_container_count, balls_count):
         self.gridObj = Grid(bottom_container_count)
         self.balls = [Ball() for _ in range(0, balls_count)]
-
-
 
     def initiate_balls(self):
         for ball in self.balls:
@@ -115,9 +114,34 @@ class BallSystem:
     def graph(self):
         baseLevel = self.run_all_balls()
         x = [i for i in range(0, len(baseLevel))]
+        balls_mean, balls_std = self.statistics()
+
         plt.bar(x, baseLevel)
+        plt.axvline(x=balls_mean-balls_std, color='red')
+        plt.axvline(x=balls_mean, color='blue')
+        plt.axvline(x=balls_mean+balls_std, color='red')
         plt.show()
 
+    def prep_statistics(self):
+        baseLevel = self.gridObj.get_base_level()
+        nums = []
+        for i in range(0, len(baseLevel)):
+            for j in range(0, baseLevel[i]):
+                nums.append(i)
 
-system = BallSystem(11, 5000)
-system.graph()
+        return nums
+
+    def statistics(self):
+        baseLevel_nums = self.prep_statistics()
+        balls_mean = np.mean(baseLevel_nums)
+        balls_std = np.std(baseLevel_nums)
+        print(f'Mean position: {balls_mean}')
+        print(f'Position standard deviation: {balls_std}')
+        return balls_mean, balls_std
+
+
+if __name__ == '__main__':
+    system = BallSystem(11, 5000)
+    system.graph()
+
+
