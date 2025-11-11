@@ -32,38 +32,41 @@ def first_entry_to_back(lst: list):
 
 
 def compare_entry(lst: list, entry, maxComps: int):
-    print(f"List passed to Compare = {lst}")
-    print(f"Entry passed to Compare = {entry}")
-    print(f"maxComps passed to Compare = {maxComps}")
     possComp = 1
+    placesToMove = 0
     while possComp <= maxComps:
-        print(f"possComp = {possComp}")
         compValue = lst[-1-possComp]
-        print(f"Compare value = {compValue}")
         greater = entry > compValue
-        print(f"Greater = {greater}")
         less = entry < compValue
-        print(f"less = {less}")
         equal = entry == compValue
-        print(f"equal = {equal}")
-        print("*"*20)
-        possComp+=1
+
+        if greater or equal:
+            break
+        else:
+            placesToMove += 1
+            possComp += 1
+
+    newList = placeEntry(lst, entry, placesToMove)
+    return newList
+
+
+def placeEntry(lst: list, value, placesToMove: int):
+    if placesToMove != 0:
+        lst.insert(-placesToMove-1, value)
+        lst = lst[:-1]
+    return lst
 
 
 def sort(lst: list):
-    print(f"Starting List: {lst}")
     for i, ent in enumerate(lst):
-        print(f"i = {i}")
         lst = first_entry_to_back(lst)
-        print(f"List after first to back = {lst}")
         if i != 0:
-            compare_entry(lst, lst[-1], i)
-            print("="*80)
-        else:
-            print("="*80)
+            lst = compare_entry(lst, lst[-1], i)
+
+    return lst
 
 
 if __name__ == "__main__":
-    # listToSort = [5, 2, 6, 1, 4]
-    listToSort = [5, 2, 4]
-    sort(listToSort)
+    listToSort = [5, 2, 6, 1, 4]
+    sortedList = sort(listToSort)
+    print(sortedList)
