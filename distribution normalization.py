@@ -29,6 +29,11 @@ old population (and the percentages should still work).
 """
 
 
+class Population:
+    # The Population Class for distribution
+    def __init__(self):
+        populations_older = False
+        population_density = {}
 
 
 if __name__ == "__main__":
